@@ -1,6 +1,6 @@
 require_relative '../models/task.rb'
 
-class TaskMagangerApp < Sinatra::Base
+class TaskManangerApp < Sinatra::Base
   set :root, File.expand_path("..", __dir__)
 
   get '/' do
@@ -8,7 +8,7 @@ class TaskMagangerApp < Sinatra::Base
   end
 
   get '/tasks' do
-    @tasks = ["task1", "task2", "task3"]
+    @tasks = Task.all
     erb :index
   end
 
