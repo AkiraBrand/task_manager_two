@@ -1,12 +1,18 @@
 class Task
 
-  attr_reader :title, :description
+  attr_reader :title, :description, :id
 
   def initialize(task_params)
     @description = task_params["description"]
     @title = task_params["title"]
-    @database = SQLite3::Database.new('db/task_manager_development.db')
-    @database.results_as_hash = true
+    @id = task_params["id"] if task_params["id"]
+  end
+
+  def self.database
+    database =
+    SQLite3::Database.new('db/task_manager_development.db')
+    database.results_as_hash = true
+    database
   end
 
   def save
@@ -21,6 +27,14 @@ class Task
     tasks.map do |task|
       Task.new(task)
     end
+  end
+
+  def self.find(id)
+    database =
+    SQLite3::Database.new('db/task_manager_development.db')
+    database.results_as_hash = true
+    task = database.execute("SELECT * FROM tasks WHERE id = ?", id.to_i).first
+    Task.new(task)
   end
 
 end
